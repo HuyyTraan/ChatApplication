@@ -1,205 +1,223 @@
-🛰️ WeApRous – Hybrid Chat Application
-CO3094 – Computer Networks – HCMUT
-📌 Overview
+⭐ WeApRous – Custom HTTP Server & Hybrid Chat System
+🏫 CO3094 – Computer Networks – Ho Chi Minh City University of Technology
+📘 1. Introduction
 
 This project implements:
 
-Task 1A – Authentication (HTTP Server)
+🟦 Task 1A – Custom HTTP Server & Authentication
+Built entirely on raw Python sockets, with full HTTP parsing, cookie/session handling, and a minimal routing framework.
 
-Custom HTTP server using Python sockets
+🟩 Task 2.2 – Hybrid Chat Application
+Implements peer registration, discovery, broadcast messaging, direct messaging, and a modern chat UI.
 
-Request parsing (method, path, headers, cookies, body)
+This assignment demonstrates practical understanding of:
 
-Response builder (status line, headers, JSON, static HTML)
+TCP socket programming
 
-Cookie & session management (auth=true + sessionid)
+HTTP protocol
 
-Simple login page + API /login
+State management with cookies
 
-Task 2.2 – Hybrid Chat Application
+Peer communication
 
-Peer registration, tracker update
+Real-time message handling
 
-Peer discovery
+UI/UX considerations for networking applications
 
-Connection setup
+🎯 2. Features
+🔐 Task 1A – HTTP Authentication
 
-Broadcast chatting
+Custom built HTTP server (no Flask/Django)
 
-Direct peer messaging
+Multi-threaded TCP handler
 
-Channel management
+Request parsing: method, path, headers, cookies, body
 
-Modern web UI (HTML + CSS + JavaScript)
+Response builder (status line, headers, JSON/HTML)
 
-📂 Project Structure
+Session + cookie authentication (auth, sessionid)
+
+Login API + UI
+
+💬 Task 2.2 – Hybrid Chat Application
+
+Peer registration (/submit-info)
+
+Channel join/listing
+
+Peer discovery (/get-list)
+
+Broadcast messaging
+
+Direct peer-to-peer messaging
+
+Modern chat UI (inspired by Messenger/Discord)
+
+Auto-refresh every 2 seconds (polling)
+
+Clickable peer for direct chat mode
+
+Per-channel message history
+
+🏗️ 3. System Architecture
+📱 Chat UI          – HTML, CSS, JavaScript
+│
+├── 🌐 Chat API     – Broadcast + Direct Messaging
+│
+└── 🔌 HTTP Server  – Python Sockets (custom design)
+       ├── Request Parser
+       ├── Cookie / Session Manager
+       ├── Routing Framework
+       └── Static File Server
+
+📁 4. Directory Structure
 CO3094-weaprous/
 │
 ├── daemon/
-│   ├── backend.py          # Low-level TCP server (multi-threaded)
-│   ├── httpadapter.py      # HTTP parsing, connection handling
-│   ├── request.py          # Parse HTTP request & cookies
-│   ├── response.py         # JSON + static HTML responses
-│   └── weaprous.py         # Mini web framework (route decorator)
+│   ├── backend.py          # Low-level TCP server
+│   ├── httpadapter.py      # HTTP decode/encode + connection handling
+│   ├── request.py          # Parse HTTP request line/headers/cookies
+│   ├── response.py         # Build response (HTML/JSON)
+│   └── weaprous.py         # Mini web framework (router)
 │
 ├── apps/
-│   └── app.py              # Task 1A + Task 2.2 API handlers
+│   └── app.py              # Task 1A + Task 2.2 API implementation
 │
 ├── www/
-│   ├── index.html          # Task 1A homepage
-│   ├── login.html          # Login UI (Task 1A)
-│   └── chat.html           # Web UI for hybrid chat
+│   ├── index.html          # Homepage
+│   ├── login.html          # Authentication UI
+│   └── chat.html           # Hybrid chat interface
 │
-├── static/                 # (Optional) assets, icons
+├── static/                 # Static assets (optional)
 │
-├── start_app.py            # Start server with clickable link
-├── start_backend.py
-├── start_proxy.py
+├── start_app.py            # Start server (includes clickable URLs)
 └── README.md
 
-🚀 Running the Server
+🚀 5. Running the Application
+▶️ Start the Server
 cd CO3094-weaprous/CO3094-weaprous
 python start_app.py --server-ip 0.0.0.0 --server-port 9000
 
-
-After starting, you will see:
-
-Backend listening on: http://0.0.0.0:9000
-Open chat UI:
-   http://127.0.0.1:9000/chat.html
+🌍 Open the Chat UI
+http://127.0.0.1:9000/chat.html
 
 
-Open a browser and visit the chat UI.
+Open multiple tabs to simulate multiple peers.
 
-🧪 Task 1A – Authentication API
+🔐 6. Task 1A – Authentication
 POST /login
-Request body:
 {
   "username": "admin",
   "password": "password"
 }
 
-Successful response:
+✔ Successful Response
 {
   "status": "authorized",
   "message": "Login successful"
 }
 
-Access Control
+🔒 Protected Route
 
 Accessing / requires:
 
 auth=true
 
-sessionid=<token>
+sessionid=<valid token>
 
-Otherwise → 401 Unauthorized.
+Else → 401 Unauthorized
 
-💬 Task 2.2 – Hybrid Chat Application
-
-The chat system supports:
-
-Broadcast (send to everyone in the channel)
-
-Direct chat (send privately to one peer)
-
-Channel management
-
-Peer discovery
-
-Automatic refresh (polling every 2 seconds)
-
-Open UI:
-
-http://127.0.0.1:9000/chat.html
-
-
-Each browser tab acts as a peer.
-
-🔌 Chat APIs
-Endpoint	Method	Description
+💬 7. Task 2.2 – Hybrid Chat API
+🔧 Peer Management
+Endpoint	Method	Purpose
 /submit-info	POST	Register peer (username, IP, port)
-/add-list	POST	Join a channel
-/get-list	GET	Get peers + channels
-/connect-peer	POST	Retrieve peer IP/port for connection setup
-/broadcast-peer	POST	Send broadcast message
-/send-peer	POST	Send direct message
-/channel/messages	POST	Fetch channel message history
-📡 Protocol Flow Overview
-1. Initialization Phase
+/add-list	POST	Join channel
+/get-list	GET	Retrieve peer list + channel list
+/connect-peer	POST	Retrieve IP/port of a target peer
+💭 Messaging
+Endpoint	Method	Purpose
+/broadcast-peer	POST	Broadcast chat message
+/send-peer	POST	Direct peer-to-peer message
+/channel/messages	POST	Load message history
+🖥️ 8. Chat UI Overview
 
-Peer → /submit-info
+The chat interface (chat.html) includes:
 
-Server updates tracker
+👤 Peer login module
 
-Peer joins channel via /add-list
+📡 Channel selection
 
-Peer gets list via /get-list
+🧑‍🤝‍🧑 Peer list
 
-2. Connection Setup
+💬 Message window
+
+⌨️ Input composer
+
+🔄 Automatic polling every 2 seconds
+
+🎯 Direct chat mode (click peer name)
+
+Modes
+
+Broadcast Mode
+Send to all peers in a channel
+
+Direct Mode
+Visible only to sender + target peer
+
+🔄 9. Communication Workflow
+Initialization Phase
+
+Login (Task 1A)
+
+Register peer → /submit-info
+
+Join channel → /add-list
+
+Fetch peers/channels → /get-list
+
+Connection Setup
 POST /connect-peer
 {
-   "from": "alice",
-   "to": "bob"
-}
-
-
-Returns IP + port of target peer.
-
-3. Chatting Phase
-Broadcast
-POST /broadcast-peer
-{
   "from": "alice",
-  "channel": "general",
-  "message": "hello everyone"
+  "to": "bob"
 }
 
-Direct
-POST /send-peer
-{
-  "from": "alice",
-  "to": "bob",
-  "channel": "general",
-  "message": "hi bob"
-}
+Messaging Phase
 
-🖥️ Web UI (chat.html)
+Broadcast → /broadcast-peer
 
-Features:
+Direct → /send-peer
 
-Peer login
+Retrieve history → /channel/messages
 
-Realtime peer list
+🛠️ 10. Technologies Used
 
-Channel list
+Python 3
 
-Broadcast & direct messaging
+TCP sockets
 
-Beautiful modern UI
+Multi-threading
 
-Auto-refreshing messages
+Custom HTTP parsing
 
-Direct mode: Click a peer → UI switches to direct message mode.
+Vanilla JavaScript
 
-🛠️ Technologies Used
+HTML + CSS (custom UI, no frameworks)
 
-Python (socket programming)
-
-Custom HTTP server (no Flask/Django)
-
-HTML / CSS / JavaScript
-
-Multi-thread TCP architecture
-
-Client polling for message updates
-
-👨‍🎓 Author
+👨‍💻 11. Author
 
 Trần Vũ Đình Huy
-Computer Science & Engineering – HCMUT
+Computer Science & Engineering
+Ho Chi Minh City University of Technology
 Course: CO3094 – Computer Networks
 
-✔ Status
+📌 12. Project Status
 
-All requirements for Task 1A and Task 2.2 have been fully implemented and verified.
+All functionalities required for:
+
+Task 1A (Authentication)
+
+Task 2.2 (Hybrid Chat System)
+
+have been fully implemented, tested, and successfully demonstrated.
