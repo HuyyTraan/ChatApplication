@@ -1,83 +1,46 @@
-<div align="center">
-
-# 🌐 WeApRous – Custom HTTP Server & Hybrid Chat
-### CO3094 – Computer Networks | Ho Chi Minh City University of Technology
-
-![Python](https://img.shields.io/badge/Language-Python_3-blue?style=for-the-badge&logo=python)
-![Protocol](https://img.shields.io/badge/Protocol-HTTP%2F1.1-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Completed-success?style=for-the-badge)
-![Course](https://img.shields.io/badge/Course-CO3094-orange?style=for-the-badge)
-
-<p>
-  <b>A lightweight networking framework built from scratch using Python sockets.</b><br>
-  <i>Demonstrating TCP/HTTP protocols, Client–Server architecture, and Real-time Web Application design.</i>
-</p>
-
-</div>
-
----
-
-## 🚀 Overview
-
-**WeApRous** is a custom networking project developed for the course **CO3094**. It bridges low-level network programming and application-layer design by implementing a web server without external frameworks.
-
-The project consists of two main components:
-1.  **🟦 Task 1A:** A Multi-threaded HTTP Server with custom request parsing and cookie-based authentication.
-2.  **🟩 Task 2.2:** A Hybrid Chat Application supporting both **Broadcast** (channel-wide) and **Direct** (P2P) messaging.
-
----
-
-## 🧠 Key Features
-
-### 🔐 Task 1A – HTTP Server Core
-* **Pure Python Sockets:** No external web frameworks (Flask/Django) used.
-* **Multi-threading:** Handles multiple client connections simultaneously.
-* **HTTP Parser:** Custom parsing for Methods (GET/POST), Headers, Cookies, and Body.
-* **Authentication:** Session-based login system (`auth=true`, `sessionid`).
-* **Routing:** Minimalistic routing system using decorators.
-* **Static Files:** Serves HTML, CSS, and JS assets efficiently.
-
-### 💬 Task 2.2 – Hybrid Chat System
-* **Dual Communication Modes:**
-    * 🌍 **Broadcast:** Messages sent to all peers in a channel.
-    * 🔒 **Direct:** Private peer-to-peer messaging.
-* **Tracker Mechanism:** Manages peer discovery and channel lists.
-* **Real-time Updates:** Polling mechanism for instant message delivery.
-* **Modern UI:** Responsive web interface with auto-refresh logic.
-
----
-
-## 🧩 Architecture
-
-The system follows a **Client-Server** model combined with **Hybrid Peer Logic**.
-
-```mermaid
-graph TD
-    A[Client / Web Browser] -->|HTTP Request| B(Server / Python Daemon)
-    B -->|Parse| C{Router}
-    C -->|Task 1A| D[Auth & Static Files]
-    C -->|Task 2.2| E[Chat API & Tracker]
-    E --> F[Socket Layer]
-🗂️ Directory StructureBashCO3094-weaprous/
+🌐 WeApRous – Custom HTTP Server & Hybrid Chat SystemCO3094 – Computer Networks – Ho Chi Minh City University of Technology (HCMUT)WeApRous là một framework mạng gọn nhẹ được xây dựng từ đầu bằng Python sockets, được phát triển cho môn học CO3094 – Mạng Máy Tính.Dự án này thể hiện sự hiểu biết sâu sắc về:Giao thức TCP/HTTPGiao tiếp ở tầng socketTương tác Client–Server & Peer–to–PeerXác thực bằng Cookie/SessionThiết kế ứng dụng web thời gian thực🚀 Tổng quan về dự ánDự án bao gồm hai phần chính:TaskDescription🟦 Task 1A – HTTP Server & AuthenticationCài đặt một HTTP server đa luồng tùy chỉnh, bộ phân tích request, và hệ thống đăng nhập dựa trên session.🟩 Task 2.2 – Hybrid Chat ApplicationMột ứng dụng chat thời gian thực hỗ trợ broadcast và nhắn tin trực tiếp (peer-to-peer) thông qua các endpoint HTTP và giao diện web hiện đại.🧠 Tính năng chính🔐 Task 1A – HTTP ServerWeb server dựa trên Python socket (không dùng framework bên ngoài).Xử lý client đa luồng (multi-threaded).Phân tích request HTTP (method, path, headers, cookies, body).Xác thực dựa trên cookie (auth=true, sessionid).Hệ thống routing tối giản sử dụng decorators.Phục vụ tệp tĩnh (HTML, CSS, JS).💬 Task 2.2 – Hybrid ChatĐăng ký peer và quản lý kênh chat.Khám phá peer dựa trên Tracker.Hai chế độ giao tiếp:Broadcast (đến tất cả peer trong kênh).Direct (nhắn tin riêng tư peer-to-peer).Cơ chế Polling để cập nhật theo thời gian thực.Giao diện chat hiện đại, responsive.API backend đơn giản, có khả năng mở rộng.🛠️ Công nghệ sử dụngComponentTechnologyBackendPython (sockets, threading)ProtocolHTTP 1.1 (custom implementation)AuthenticationCookie + SessionFrontendHTML5, CSS3, JavaScriptCommunicationJSON over HTTPArchitectureClient–Server + Hybrid Peer Logic🧩 Kiến trúc & Cấu trúc thư mụcSơ đồ kiến trúcPlaintext📡 Client (Web Browser)
 │
-├── daemon/                 # Core Server Logic
-│   ├── backend.py          # TCP server implementation
-│   ├── httpadapter.py      # HTTP parsing adapter
-│   ├── request.py          # Request parsing (headers, cookies)
-│   ├── response.py         # Response builder (HTML/JSON)
-│   └── weaprous.py         # Routing framework
+├── Chat UI (HTML + CSS + JS)
+│    ├── Peer Login
+│    ├── Channel Selection
+│    ├── Peer List
+│    └── Message Window
+│
+└── Server (Python)
+     ├── HTTP Parser (Request + Response)
+     ├── Routing System (Task 1A)
+     ├── Chat APIs (Task 2.2)
+     ├── Tracker + Channel Manager
+     └── Socket Layer (Multi-threaded)
+Cấu trúc thư mụcCO3094-weaprous/
+│
+├── daemon/
+│   ├── backend.py          # Lõi logic TCP server
+│   ├── httpadapter.py      # Phân tích HTTP và client adapter
+│   ├── request.py          # Phân tích request line, header, cookie
+│   ├── response.py         # Xây dựng response (HTML/JSON)
+│   └── weaprous.py         # Framework routing gọn nhẹ
 │
 ├── apps/
-│   └── app.py              # Business Logic (Auth + Chat APIs)
+│   └── app.py              # Logic API cho Task 1A + Task 2.2
 │
-├── www/                    # Frontend Interface
-│   ├── index.html          # Homepage
-│   ├── login.html          # Login UI
-│   └── chat.html           # Main Chat UI
+├── www/
+│   ├── index.html          # Trang chủ
+│   ├── login.html          # Giao diện xác thực
+│   └── chat.html           # Giao diện web chat
 │
-├── static/                 # Assets (CSS/JS/Images)
-├── start_app.py            # Entry Point
+├── static/                 # (Tùy chọn) Tệp tĩnh, assets
+│
+├── start_app.py            # Entry point (khởi chạy server)
 └── README.md
-⚙️ Setup & Execution1. PrerequisitesPython 3.x installed.2. Run the ServerNavigate to the project directory and start the application:Bashcd CO3094-weaprous/CO3094-weaprous
+⚙️ Cài đặt & Khởi chạyChạy Server:Mở terminal và điều hướng đến thư mục dự án:Bashcd CO3094-weaprous/CO3094-weaprous
 python start_app.py --server-ip 0.0.0.0 --server-port 9000
-3. Access the ApplicationOpen your web browser and visit:http://127.0.0.1:9000/chat.htmlTip: Open the URL in multiple tabs (Incognito mode recommended) to simulate multiple peers.🔌 API Documentation🔐 Authentication (Task 1A)EndpointMethodDescription/loginPOSTAuthenticates user. Requires username & password. Returns sessionid.Protected Routes*Checks for Cookie: auth=true and valid session. Returns 401 if invalid.💬 Hybrid Chat (Task 2.2)Peer ManagementEndpointMethodDescription/submit-infoPOSTRegisters peer (Username, IP, Port)./add-listPOSTJoins a specific channel./get-listGETRetrieves list of active peers and channels./connect-peerPOSTRetrieves IP/Port for a target peer (for Direct Mode).MessagingEndpointMethodDescription/broadcast-peerPOSTSends a message to all peers in the channel./send-peerPOSTSends a private message to a specific peer./channel/messagesPOSTRetrieves message history for the UI.🖥️ User InterfaceThe interface (chat.html) provides a responsive, Messenger-like experience:Left Panel: Peer list & Channel selection.Right Panel: Message history & Input composer.Interaction:Clicking a peer switches to Direct Mode.Default view is Broadcast Mode.Auto-refreshes every 2 seconds to fetch new data.🛠️ Technology StackBackend: Python (Sockets, Threading)Protocol: HTTP 1.1 (Custom Implementation)Frontend: HTML5, CSS3, JavaScript (Fetch API)Data Exchange: JSON over HTTP👨‍💻 AuthorTrần Vũ Đình HuyInstitution: Ho Chi Minh City University of Technology (HCMUT)Course: Computer Networks (CO3094)<div align="center"><i>This project is for educational purposes, demonstrating how real communication systems are built from first principles.</i></div>
+Truy cập ứng dụng:Mở trình duyệt và truy cập:http://127.0.0.1:9000/chat.htmlMẹo: Mở nhiều tab trình duyệt để giả lập nhiều peer cùng tham gia.📚 Tài liệu API🔐 Task 1A – Authentication APIPOST /loginXác thực người dùng và cấp cookie.Request Body:JSON{
+  "username": "admin",
+  "password": "password"
+}
+Response (Success):JSON{
+  "status": "authorized",
+  "message": "Login successful"
+}
+Lưu ý: Các route được bảo vệ yêu cầu:Cookie auth=trueMột sessionid hợp lệNếu không, server sẽ trả về 401 Unauthorized.💬 Task 2.2 – Hybrid Chat API🧭 Quản lý Peer & KênhEndpointMethodDescription/submit-infoPOSTĐăng ký thông tin peer (username, IP, port)./add-listPOSTTham gia vào một kênh chat./get-listGETLấy danh sách tất cả peer và kênh hiện có./connect-peerPOSTLấy IP/port của một peer cụ thể để kết nối trực tiếp.💭 Gửi & Nhận tin nhắnEndpointMethodDescription/broadcast-peerPOSTGửi tin nhắn broadcast đến tất cả peer trong kênh./send-peerPOSTGửi tin nhắn riêng tư (direct) đến một peer./channel/messagesPOSTLấy lịch sử tin nhắn của một kênh.🖥️ Giao diện người dùng (chat.html)Giao diện chat.html cung cấp trải nghiệm giống Messenger:Bên trái: Danh sách Peer & Kênh.Bên phải: Khung hội thoại.Bên dưới: Khung soạn thảo tin nhắn.Tự động làm mới (auto-refresh) mỗi 2 giây để lấy tin nhắn mới.Chế độ giao tiếp🌍 Broadcast Mode: Tin nhắn được gửi đến tất cả mọi người trong kênh.🔒 Direct Mode: Tin nhắn được gửi riêng tư giữa hai peer. (Chuyển sang chế độ này bằng cách nhấp vào tên một peer trong danh sách).🔄 Luồng hoạt động (Workflow)Phase Khởi tạo:Peer đăng nhập (/login).Peer đăng ký thông tin (/submit-info).Peer tham gia kênh (/add-list).Peer lấy danh sách các peer khác (/get-list).Phase Thiết lập kết nối (Direct):Peer A yêu cầu thông tin của Peer B qua /connect-peer.Phase Chat:Gửi Broadcast: POST /broadcast-peer.Gửi Direct: POST /send-peer.Lấy tin nhắn mới: POST /channel/messages (thực hiện polling).🧾 Trạng thái dự án✅ Task 1A – Completed (Authentication & HTTP Server)✅ Task 2.2 – Completed (Hybrid Chat with Broadcast + Direct Messaging)✅ UI – Completed (Responsive, functional, auto-refreshing)✅ Architecture – Verified and documented🧭 Tóm tắtDự án này trình bày việc triển khai end-to-end của một hệ thống giao tiếp dựa trên HTTP—từ việc phân tích giao thức ở tầng socket đến tương tác peer-to-peer trên nền tảng web.Nó là cầu nối giữa lập trình mạng cấp thấp và thiết kế tầng ứng dụng, cho thấy cách các hệ thống truyền thông thực tế được xây dựng từ những nguyên tắc cơ bản.👨‍💻 Tác giảTrần Vũ Đình HuyKhoa Khoa học và Kỹ thuật Máy tínhTrường Đại học Bách khoa (HCMUT)Môn học: CO3094 – Mạng Máy Tính
