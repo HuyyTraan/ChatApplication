@@ -1,27 +1,24 @@
 🛰️ WeApRous – Hybrid Chat Application
 CO3094 – Computer Networks – HCMUT
-Big Lab Assignment (Task 1A + Task 2.2)
-📌 Giới thiệu
+📌 Overview
 
-Dự án này triển khai HTTP Server tự xây dựng từ socket và Hybrid Chat Application (Client–Server + Pseudo P2P) dựa trên yêu cầu của môn CO3094 – Computer Networks (232/233).
+This project implements:
 
-Hệ thống gồm:
+Task 1A – Authentication (HTTP Server)
 
-Task 1A – Authentication Handling
+Custom HTTP server using Python sockets
 
-Tự xây dựng HTTP server bằng Python socket
+Request parsing (method, path, headers, cookies, body)
 
-Xử lý HTTP request, response, cookie, session
+Response builder (status line, headers, JSON, static HTML)
 
-API Login + trang chủ yêu cầu cookie auth và sessionid
+Cookie & session management (auth=true + sessionid)
+
+Simple login page + API /login
 
 Task 2.2 – Hybrid Chat Application
 
-Mô phỏng quá trình:
-
-Peer registration
-
-Tracker update
+Peer registration, tracker update
 
 Peer discovery
 
@@ -31,140 +28,126 @@ Broadcast chatting
 
 Direct peer messaging
 
-Kèm theo web UI giống messenger dùng HTML/CSS/JS
+Channel management
 
-📁 Cấu trúc thư mục
+Modern web UI (HTML + CSS + JavaScript)
+
+📂 Project Structure
 CO3094-weaprous/
 │
-├── daemon/                 # HTTP server core (socket)
-│   ├── backend.py          # Multi-threaded TCP server
-│   ├── httpadapter.py      # Handle low-level HTTP parsing
-│   ├── request.py          # Parse HTTP request (method, headers, cookies, body)
-│   ├── response.py         # Build HTTP responses (JSON + static HTML)
+├── daemon/
+│   ├── backend.py          # Low-level TCP server (multi-threaded)
+│   ├── httpadapter.py      # HTTP parsing, connection handling
+│   ├── request.py          # Parse HTTP request & cookies
+│   ├── response.py         # JSON + static HTML responses
 │   └── weaprous.py         # Mini web framework (route decorator)
 │
 ├── apps/
 │   └── app.py              # Task 1A + Task 2.2 API handlers
 │
 ├── www/
-│   ├── index.html          # Homepage (Task 1A)
+│   ├── index.html          # Task 1A homepage
 │   ├── login.html          # Login UI (Task 1A)
-│   └── chat.html           # Web UI cho Task 2.2
+│   └── chat.html           # Web UI for hybrid chat
 │
-├── static/                 # Icons / CSS (optional)
+├── static/                 # (Optional) assets, icons
 │
-├── start_app.py            # Start server (clickable URL)
+├── start_app.py            # Start server with clickable link
 ├── start_backend.py
 ├── start_proxy.py
 └── README.md
 
-🚀 Cách chạy dự án
-1️⃣ Chạy server
+🚀 Running the Server
 cd CO3094-weaprous/CO3094-weaprous
 python start_app.py --server-ip 0.0.0.0 --server-port 9000
 
 
-Sau khi chạy, terminal sẽ hiện:
+After starting, you will see:
 
-▶ Backend listening on: http://0.0.0.0:9000
-▶ Open chat UI:
-   👉 http://127.0.0.1:9000/chat.html
+Backend listening on: http://0.0.0.0:9000
+Open chat UI:
+   http://127.0.0.1:9000/chat.html
 
 
-Click để mở ngay web UI.
+Open a browser and visit the chat UI.
 
-🧪 Demo Task 1A – Authentication
-API Login
-
+🧪 Task 1A – Authentication API
 POST /login
-
-Body:
-
+Request body:
 {
   "username": "admin",
   "password": "password"
 }
 
-
-Trả về:
-
+Successful response:
 {
   "status": "authorized",
   "message": "Login successful"
 }
 
-Trang chủ yêu cầu cookie
+Access Control
 
-Khi vào /, server kiểm tra:
+Accessing / requires:
 
 auth=true
 
-sessionid=<random>
+sessionid=<token>
 
-Nếu thiếu → trả 401 Unauthorized.
+Otherwise → 401 Unauthorized.
 
-💬 Demo Task 2.2 – Hybrid Chat Application
-Giao diện chat
+💬 Task 2.2 – Hybrid Chat Application
 
-Mở trên trình duyệt:
+The chat system supports:
+
+Broadcast (send to everyone in the channel)
+
+Direct chat (send privately to one peer)
+
+Channel management
+
+Peer discovery
+
+Automatic refresh (polling every 2 seconds)
+
+Open UI:
 
 http://127.0.0.1:9000/chat.html
 
 
-Web UI gồm:
+Each browser tab acts as a peer.
 
-Peer login + info
+🔌 Chat APIs
+Endpoint	Method	Description
+/submit-info	POST	Register peer (username, IP, port)
+/add-list	POST	Join a channel
+/get-list	GET	Get peers + channels
+/connect-peer	POST	Retrieve peer IP/port for connection setup
+/broadcast-peer	POST	Send broadcast message
+/send-peer	POST	Send direct message
+/channel/messages	POST	Fetch channel message history
+📡 Protocol Flow Overview
+1. Initialization Phase
 
-Channel list
+Peer → /submit-info
 
-Peers list
+Server updates tracker
 
-Chat window (messages)
+Peer joins channel via /add-list
 
-Mode:
-
-Broadcast (gửi cho mọi người trong channel)
-
-Direct (click vào 1 peer để gửi riêng)
-
-🔌 Danh sách API cho Task 2.2
-API	Method	Mô tả
-/submit-info	POST	Đăng ký peer lên tracker
-/add-list	POST	Join channel
-/get-list	GET	Lấy danh sách peers + channels
-/connect-peer	POST	Lấy IP/port của peer đích
-/broadcast-peer	POST	Gửi broadcast message
-/send-peer	POST	Gửi direct message
-/channel/messages	POST	Lấy lịch sử chat của channel
-📌 Chi tiết hoạt động hệ thống
-1. Initialization Phase (Client–Server)
-
-Client gửi /submit-info để đăng ký
-
-Server lưu thông tin peer vào CHAT_PEERS
-
-Client gửi /add-list để join channel
-
-Client gọi /get-list để xem danh sách peers/channels
+Peer gets list via /get-list
 
 2. Connection Setup
-
-Gọi API:
-
 POST /connect-peer
 {
-  "from": "alice",
-  "to": "bob"
+   "from": "alice",
+   "to": "bob"
 }
 
 
-Server trả IP & port để client có thể mở kết nối riêng (nếu cần).
+Returns IP + port of target peer.
 
-🔊 3. Peer Chatting Phase
-✔ Broadcast messaging
-
-Gửi cho tất cả người trong channel:
-
+3. Chatting Phase
+Broadcast
 POST /broadcast-peer
 {
   "from": "alice",
@@ -172,10 +155,7 @@ POST /broadcast-peer
   "message": "hello everyone"
 }
 
-✔ Direct messaging
-
-Gửi riêng 1 người:
-
+Direct
 POST /send-peer
 {
   "from": "alice",
@@ -184,54 +164,42 @@ POST /send-peer
   "message": "hi bob"
 }
 
-
-UI tự động lọc: chỉ 2 người liên quan mới thấy direct message.
-
 🖥️ Web UI (chat.html)
-
-Viết bằng HTML + CSS thuần (không framework)
-
-Fancy UI style: shadow, blur, gradient, dark mode
 
 Features:
 
-Login peer
+Peer login
 
-List channels
+Realtime peer list
 
-List peers
+Channel list
 
-Broadcast chat
+Broadcast & direct messaging
 
-Direct chat (click peer → bật direct mode)
+Beautiful modern UI
 
-Auto-refresh 2s/lần (polling)
+Auto-refreshing messages
 
-🛠️ Công nghệ sử dụng
+Direct mode: Click a peer → UI switches to direct message mode.
 
-Python socket (TCP server)
+🛠️ Technologies Used
 
-Tự implementar:
+Python (socket programming)
 
-HTTP parsing
+Custom HTTP server (no Flask/Django)
 
-Multi-thread connection handler
+HTML / CSS / JavaScript
 
-Cookie/session
+Multi-thread TCP architecture
 
-REST API routing
+Client polling for message updates
 
-HTML/CSS/JS thuần (không framework)
-
-🎓 Sinh viên thực hiện
+👨‍🎓 Author
 
 Trần Vũ Đình Huy
-Khoa Khoa Học & Kỹ Thuật Máy Tính – Đại Học Bách Khoa TP.HCM
-MSSV: tự điền
-Môn: CO3094 – Computer Networks (232/233)
+Computer Science & Engineering – HCMUT
+Course: CO3094 – Computer Networks
 
-📝 Ghi chú
+✔ Status
 
-Đây là phiên bản đầy đủ của cả Task 1A + Task 2.2 theo đúng cấu trúc bài tập lớn.
-
-Server chạy độc lập, không dùng framework Flask/Django — hoàn toàn socket thuần theo yêu cầu đề tài.
+All requirements for Task 1A and Task 2.2 have been fully implemented and verified.
