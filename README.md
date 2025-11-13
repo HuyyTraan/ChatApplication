@@ -1,223 +1,222 @@
-⭐ WeApRous – Custom HTTP Server & Hybrid Chat System
-🏫 CO3094 – Computer Networks – Ho Chi Minh City University of Technology
-📘 1. Introduction
+🌐 WeApRous – Custom HTTP Server & Hybrid Chat System
+CO3094 – Computer Networks – Ho Chi Minh City University of Technology
+🚀 Overview
 
-This project implements:
+WeApRous is a lightweight networking framework built from scratch using Python sockets, developed for the course CO3094 – Computer Networks.
 
-🟦 Task 1A – Custom HTTP Server & Authentication
-Built entirely on raw Python sockets, with full HTTP parsing, cookie/session handling, and a minimal routing framework.
+The project showcases a deep understanding of:
 
-🟩 Task 2.2 – Hybrid Chat Application
-Implements peer registration, discovery, broadcast messaging, direct messaging, and a modern chat UI.
+TCP/HTTP protocols
 
-This assignment demonstrates practical understanding of:
+Socket-level communication
 
-TCP socket programming
+Client–Server & Peer–to–Peer interaction
 
-HTTP protocol
+Cookie/Session authentication
 
-State management with cookies
+Real-time web application design
 
-Peer communication
+It consists of two main parts:
 
-Real-time message handling
+Task	Description
+🟦 Task 1A – HTTP Server & Authentication	Implements a custom multi-threaded HTTP server, request parser, session-based login system.
+🟩 Task 2.2 – Hybrid Chat Application	A real-time chat app supporting broadcast and direct peer messaging via HTTP endpoints and a modern web UI.
+🧠 Key Features
+🔐 Task 1A – HTTP Server
 
-UI/UX considerations for networking applications
+Python socket-based web server (no external frameworks)
 
-🎯 2. Features
-🔐 Task 1A – HTTP Authentication
+Multi-threaded client handling
 
-Custom built HTTP server (no Flask/Django)
+HTTP request parsing (method, path, headers, cookies, body)
 
-Multi-threaded TCP handler
+Cookie-based authentication (auth=true, sessionid)
 
-Request parsing: method, path, headers, cookies, body
+Minimalistic routing system using decorators
 
-Response builder (status line, headers, JSON/HTML)
+Static file serving (HTML, CSS, JS)
 
-Session + cookie authentication (auth, sessionid)
+💬 Task 2.2 – Hybrid Chat
 
-Login API + UI
+Peer registration and channel management
 
-💬 Task 2.2 – Hybrid Chat Application
+Tracker-based peer discovery
 
-Peer registration (/submit-info)
+Two communication modes:
 
-Channel join/listing
+Broadcast (to all peers in a channel)
 
-Peer discovery (/get-list)
+Direct (private peer-to-peer message)
 
-Broadcast messaging
+Polling mechanism for real-time updates
 
-Direct peer-to-peer messaging
+Responsive, modern chat UI
 
-Modern chat UI (inspired by Messenger/Discord)
+Simple, scalable backend API
 
-Auto-refresh every 2 seconds (polling)
-
-Clickable peer for direct chat mode
-
-Per-channel message history
-
-🏗️ 3. System Architecture
-📱 Chat UI          – HTML, CSS, JavaScript
+🧩 Architecture Overview
+📡 Client (Web Browser)
 │
-├── 🌐 Chat API     – Broadcast + Direct Messaging
+├── Chat UI (HTML + CSS + JS)
+│    ├── Peer Login
+│    ├── Channel Selection
+│    ├── Peer List
+│    └── Message Window
 │
-└── 🔌 HTTP Server  – Python Sockets (custom design)
-       ├── Request Parser
-       ├── Cookie / Session Manager
-       ├── Routing Framework
-       └── Static File Server
+└── Server (Python)
+     ├── HTTP Parser (Request + Response)
+     ├── Routing System (Task 1A)
+     ├── Chat APIs (Task 2.2)
+     ├── Tracker + Channel Manager
+     └── Socket Layer (Multi-threaded)
 
-📁 4. Directory Structure
+🗂️ Directory Structure
 CO3094-weaprous/
 │
 ├── daemon/
-│   ├── backend.py          # Low-level TCP server
-│   ├── httpadapter.py      # HTTP decode/encode + connection handling
-│   ├── request.py          # Parse HTTP request line/headers/cookies
-│   ├── response.py         # Build response (HTML/JSON)
-│   └── weaprous.py         # Mini web framework (router)
+│   ├── backend.py          # Core TCP server logic
+│   ├── httpadapter.py      # HTTP parsing and client adapter
+│   ├── request.py          # Request line, header, and cookie parsing
+│   ├── response.py         # Response builder (HTML/JSON)
+│   └── weaprous.py         # Lightweight routing framework
 │
 ├── apps/
-│   └── app.py              # Task 1A + Task 2.2 API implementation
+│   └── app.py              # API logic for Task 1A + Task 2.2
 │
 ├── www/
 │   ├── index.html          # Homepage
 │   ├── login.html          # Authentication UI
-│   └── chat.html           # Hybrid chat interface
+│   └── chat.html           # Hybrid chat web interface
 │
-├── static/                 # Static assets (optional)
+├── static/                 # Optional assets
 │
-├── start_app.py            # Start server (includes clickable URLs)
+├── start_app.py            # Entry point (clickable startup links)
 └── README.md
 
-🚀 5. Running the Application
-▶️ Start the Server
+⚙️ Setup & Execution
+1. Run the Server
 cd CO3094-weaprous/CO3094-weaprous
 python start_app.py --server-ip 0.0.0.0 --server-port 9000
 
-🌍 Open the Chat UI
+2. Access the Application
+
+Visit in your browser:
+
 http://127.0.0.1:9000/chat.html
 
 
 Open multiple tabs to simulate multiple peers.
 
-🔐 6. Task 1A – Authentication
+🔐 Task 1A – Authentication API
+
 POST /login
+Authenticate user and issue cookies.
+
+Request
+
 {
   "username": "admin",
   "password": "password"
 }
 
-✔ Successful Response
+
+Response
+
 {
   "status": "authorized",
   "message": "Login successful"
 }
 
-🔒 Protected Route
 
-Accessing / requires:
+Protected routes require:
 
-auth=true
+Cookie auth=true
 
-sessionid=<valid token>
+Valid sessionid
 
-Else → 401 Unauthorized
+Unauthorized → 401 Unauthorized
 
-💬 7. Task 2.2 – Hybrid Chat API
-🔧 Peer Management
-Endpoint	Method	Purpose
+💬 Task 2.2 – Hybrid Chat API
+🧭 Peer Management
+Endpoint	Method	Description
 /submit-info	POST	Register peer (username, IP, port)
-/add-list	POST	Join channel
-/get-list	GET	Retrieve peer list + channel list
-/connect-peer	POST	Retrieve IP/port of a target peer
+/add-list	POST	Join a channel
+/get-list	GET	Retrieve all peers and channels
+/connect-peer	POST	Retrieve IP/port for a specific peer
 💭 Messaging
-Endpoint	Method	Purpose
-/broadcast-peer	POST	Broadcast chat message
-/send-peer	POST	Direct peer-to-peer message
-/channel/messages	POST	Load message history
-🖥️ 8. Chat UI Overview
+Endpoint	Method	Description
+/broadcast-peer	POST	Send broadcast message to all peers
+/send-peer	POST	Send private (direct) message
+/channel/messages	POST	Retrieve channel message history
+🖥️ User Interface
 
-The chat interface (chat.html) includes:
+chat.html provides a responsive, Messenger-like experience:
 
-👤 Peer login module
+Left: Peer & channel list
 
-📡 Channel selection
+Right: Message panel
 
-🧑‍🤝‍🧑 Peer list
+Bottom: Input composer
 
-💬 Message window
+Auto refresh every 2 seconds
 
-⌨️ Input composer
+Click peer → switch to Direct Mode
 
-🔄 Automatic polling every 2 seconds
-
-🎯 Direct chat mode (click peer name)
+Clear distinction between broadcast and direct messages
 
 Modes
 
-Broadcast Mode
-Send to all peers in a channel
+🌍 Broadcast Mode: message sent to everyone in the channel.
 
-Direct Mode
-Visible only to sender + target peer
+🔒 Direct Mode: message sent privately between two peers.
 
-🔄 9. Communication Workflow
+🔄 Workflow Summary
+
 Initialization Phase
 
-Login (Task 1A)
+Peer logs in (/login)
 
-Register peer → /submit-info
+Peer registers info (/submit-info)
 
-Join channel → /add-list
+Joins a channel (/add-list)
 
-Fetch peers/channels → /get-list
+Retrieves peer list (/get-list)
 
 Connection Setup
-POST /connect-peer
-{
-  "from": "alice",
-  "to": "bob"
-}
 
-Messaging Phase
+Peer requests target info via /connect-peer
+
+Chatting Phase
 
 Broadcast → /broadcast-peer
 
 Direct → /send-peer
 
-Retrieve history → /channel/messages
+Fetch messages → /channel/messages
 
-🛠️ 10. Technologies Used
-
-Python 3
-
-TCP sockets
-
-Multi-threading
-
-Custom HTTP parsing
-
-Vanilla JavaScript
-
-HTML + CSS (custom UI, no frameworks)
-
-👨‍💻 11. Author
+🛠️ Technology Stack
+Component	Technology
+Backend	Python (sockets, threading)
+Protocol	HTTP 1.1 (custom implementation)
+Authentication	Cookie + Session
+Frontend	HTML5, CSS3, JavaScript
+Communication	JSON over HTTP
+Architecture	Client–Server + Hybrid Peer Logic
+👨‍💻 Author
 
 Trần Vũ Đình Huy
-Computer Science & Engineering
-Ho Chi Minh City University of Technology
+Computer Science and Engineering
+Ho Chi Minh City University of Technology (HCMUT)
 Course: CO3094 – Computer Networks
 
-📌 12. Project Status
+🧾 Project Status
 
-All functionalities required for:
+✅ Task 1A – Completed (Authentication & HTTP Server)
+✅ Task 2.2 – Completed (Hybrid Chat with Broadcast + Direct Messaging)
+✅ UI – Responsive, functional, auto-refreshing
+✅ Architecture – Verified and documented
 
-Task 1A (Authentication)
+🧭 Summary
 
-Task 2.2 (Hybrid Chat System)
-
-have been fully implemented, tested, and successfully demonstrated.
+This project demonstrates end-to-end implementation of an HTTP-based communication system — from socket-level protocol parsing to web-based peer interaction.
+It bridges low-level network programming and application-layer design, showcasing how real communication systems are built from first principles.
