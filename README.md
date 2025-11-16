@@ -2,7 +2,7 @@
 
 # 🌐 WeApRous – Custom HTTP Server & Hybrid Chat
 ### CO3094 – Computer Networks | Ho Chi Minh City University of Technology
-
+ 
 ![Python](https://img.shields.io/badge/Language-Python_-blue?style=for-the-badge&logo=python)
 ![Protocol](https://img.shields.io/badge/Protocol-HTTP%2F1.1-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Completed-success?style=for-the-badge)
