@@ -8,7 +8,7 @@
 ![Status](https://img.shields.io/badge/Status-Completed-success?style=for-the-badge) 
 ![Course](https://img.shields.io/badge/Course-CO3094-orange?style=for-the-badge)
 
-<p>
+<p> 
   <b>A lightweight networking framework built from scratch using Python sockets.</b><br>
   <i>Demonstrating TCP/HTTP protocols, Client–Server architecture, and Real-time Web Application design.</i>
 </p>
