@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center"> 
 
 # 🌐 WeApRous – Custom HTTP Server & Hybrid Chat
 ### CO3094 – Computer Networks | Ho Chi Minh City University of Technology     
